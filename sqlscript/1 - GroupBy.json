@@ -1,0 +1,19 @@
+{
+	"name": "1 - GroupBy",
+	"properties": {
+		"folder": {
+			"name": "Examples"
+		},
+		"content": {
+			"query": "SELECT DataType, COUNT(*) \n    FROM chicago.safety_data\n    GROUP BY DataType",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "master"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

@@ -1,0 +1,125 @@
+{
+	"name": "1 - GroupBy",
+	"properties": {
+		"folder": {
+			"name": "Examples"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "sparkpool",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"language_info": {
+				"name": "csharp"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/6cfbb0af-d872-47ab-8368-dbef1d2cf61c/resourceGroups/syn-app/providers/Microsoft.Synapse/workspaces/syn-app-cool/bigDataPools/sparkpool",
+				"name": "sparkpool",
+				"type": "Spark",
+				"endpoint": "https://syn-app-cool.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkpool",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 10,
+				"cores": 4,
+				"memory": 28,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## T-SQL\n",
+					"\n",
+					"```sql\n",
+					"SELECT DataType, COUNT(*) \n",
+					"    FROM chicago.safety_data\n",
+					"    GROUP BY DataType\n",
+					"```\n",
+					"\n",
+					""
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## Spark SQL\n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"diagram": {
+						"activateDiagramType": 1,
+						"chartConfig": {
+							"category": "bar",
+							"keys": [
+								"DataType"
+							],
+							"values": [
+								"count(1)"
+							],
+							"yLabel": "count(1)",
+							"xLabel": "DataType",
+							"aggregation": "SUM",
+							"aggByBackend": false
+						},
+						"aggData": "{\"count(1)\":{\"Safety\":5029591}}",
+						"isSummary": false,
+						"previewData": {
+							"filter": null
+						},
+						"isSql": true
+					}
+				},
+				"source": [
+					"%%sql\n",
+					"\n",
+					"SELECT DataType, COUNT(*) \n",
+					"    FROM chicago.safety_data\n",
+					"    GROUP BY DataType"
+				],
+				"execution_count": 0
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## DataFrame (C#)\n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"var dataFrame = spark.Read().Table(\"chicago.safety_data\");\n",
+					"var groupped = dataFrame\n",
+					"    .GroupBy(\"DataType\")\n",
+					"    .Agg(Functions.Count(\"DataType\"));\n",
+					"\n",
+					"groupped.Show();"
+				],
+				"execution_count": 1
+			}
+		]
+	}
+}

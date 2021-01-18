@@ -1,0 +1,19 @@
+{
+	"name": "Setup_Serverless",
+	"properties": {
+		"folder": {
+			"name": "Setup"
+		},
+		"content": {
+			"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseParquetFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat] \n\tWITH ( FORMAT_TYPE = PARQUET)\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'citydatacontainer_azureopendatastorage_blob_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [citydatacontainer_azureopendatastorage_blob_core_windows_net] \n\tWITH (\n\t\tLOCATION   = 'https://azureopendatastorage.blob.core.windows.net/citydatacontainer', \n\t)\nGO\n\nCREATE SCHEMA chicago\nGO\n\nCREATE EXTERNAL TABLE chicago.safety_data (\n\t[dataType] varchar(8000)  COLLATE Latin1_General_100_CI_AI_SC_UTF8,\n\t[dataSubtype] varchar(8000)COLLATE Latin1_General_100_CI_AI_SC_UTF8,\n\t[dateTime] datetime2(7),\n\t[category] varchar(8000)COLLATE Latin1_General_100_CI_AI_SC_UTF8,\n\t[subcategory] varchar(8000)COLLATE Latin1_General_100_CI_AI_SC_UTF8,\n\t[status] varchar(8000)COLLATE Latin1_General_100_CI_AI_SC_UTF8,\n\t[address] varchar(8000)COLLATE Latin1_General_100_CI_AI_SC_UTF8,\n\t[latitude] float,\n\t[longitude] float,\n\t[source] varchar(8000)COLLATE Latin1_General_100_CI_AI_SC_UTF8,\n\t[extendedProperties] varchar(8000)COLLATE Latin1_General_100_CI_AI_SC_UTF8\n\t)\n\tWITH (\n\tLOCATION = 'Safety/Release/city=Chicago/*.parquet',\n\tDATA_SOURCE = [citydatacontainer_azureopendatastorage_blob_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\nSELECT TOP 100 * FROM [chicago-sql].safety_data\nGO\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "master"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}
