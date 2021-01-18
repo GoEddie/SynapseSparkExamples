@@ -1,0 +1,124 @@
+{
+	"name": "2 - RowNumber",
+	"properties": {
+		"folder": {
+			"name": "Examples"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "sparkpool",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"language_info": {
+				"name": "csharp"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/6cfbb0af-d872-47ab-8368-dbef1d2cf61c/resourceGroups/syn-app/providers/Microsoft.Synapse/workspaces/syn-app-cool/bigDataPools/sparkpool",
+				"name": "sparkpool",
+				"type": "Spark",
+				"endpoint": "https://syn-app-cool.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkpool",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 10,
+				"cores": 4,
+				"memory": 28,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## T-SQL\n",
+					"\n",
+					"```sql\n",
+					"SELECT \n",
+					"    *, ROW_NUMBER() OVER(ORDER BY dateTime)  as RowNumber\n",
+					"FROM \n",
+					"    chicago.safety_data\n",
+					"```\n",
+					""
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## Spark SQL\n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"diagram": {
+						"activateDiagramType": 1,
+						"chartConfig": {
+							"category": "bar",
+							"keys": [
+								"dataType"
+							],
+							"values": [
+								"latitude"
+							],
+							"yLabel": "latitude",
+							"xLabel": "dataType",
+							"aggregation": "SUM",
+							"aggByBackend": false
+						},
+						"aggData": "{\"latitude\":{\"Safety\":41770.55239107979}}",
+						"isSummary": false,
+						"previewData": {
+							"filter": null
+						},
+						"isSql": true
+					}
+				},
+				"source": [
+					"%%sql\n",
+					"\n",
+					"SELECT *, ROW_NUMBER() OVER(ORDER BY dateTime)  as RowNumber\n",
+					"FROM\n",
+					"    chicago.safety_data"
+				],
+				"execution_count": 1
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## DataFrame API (C#)\n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"var dataFrame = spark.Read().Table(\"chicago.safety_data\");\n",
+					"\n",
+					"var window = Microsoft.Spark.Sql.Expressions.Window.OrderBy(\"dateTime\");\n",
+					"dataFrame = dataFrame.WithColumn(\"RowNumber\", Functions.RowNumber().Over(window));\n",
+					"dataFrame.Show();"
+				],
+				"execution_count": 9
+			}
+		]
+	}
+}

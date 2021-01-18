@@ -1,0 +1,19 @@
+{
+	"name": "2 - RowNumber",
+	"properties": {
+		"folder": {
+			"name": "Examples"
+		},
+		"content": {
+			"query": "\nSELECT \n    *, ROW_NUMBER() OVER(ORDER BY dateTime) as RowNumber\nFROM \n    chicago.safety_data;\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "chicago-sql"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}
