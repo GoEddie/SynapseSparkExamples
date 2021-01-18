@@ -1,0 +1,328 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"type": "string",
+			"metadata": "Workspace name",
+			"defaultValue": "syn-app-cool"
+		},
+		"syn-app-cool-WorkspaceDefaultSqlServer_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'syn-app-cool-WorkspaceDefaultSqlServer'"
+		},
+		"syn-app-cool-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dklajsldksajda.dfs.core.windows.net"
+		}
+	},
+	"variables": {
+		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('workspaceName'), '/syn-app-cool-WorkspaceDefaultSqlServer')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"parameters": {
+					"DBName": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('syn-app-cool-WorkspaceDefaultSqlServer_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/syn-app-cool-WorkspaceDefaultStorage')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('syn-app-cool-WorkspaceDefaultStorage_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AutoResolveIntegrationRuntime')]",
+			"type": "Microsoft.Synapse/workspaces/integrationRuntimes",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 0
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Setup_Serverless')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "Setup"
+				},
+				"content": {
+					"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseParquetFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat] \n\tWITH ( FORMAT_TYPE = PARQUET)\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'citydatacontainer_azureopendatastorage_blob_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [citydatacontainer_azureopendatastorage_blob_core_windows_net] \n\tWITH (\n\t\tLOCATION   = 'https://azureopendatastorage.blob.core.windows.net/citydatacontainer', \n\t)\nGO\n\nCREATE SCHEMA chicago\nGO\n\nCREATE EXTERNAL TABLE chicago.safety_data (\n\t[dataType] varchar(8000)  COLLATE Latin1_General_100_CI_AI_SC_UTF8,\n\t[dataSubtype] varchar(8000)COLLATE Latin1_General_100_CI_AI_SC_UTF8,\n\t[dateTime] datetime2(7),\n\t[category] varchar(8000)COLLATE Latin1_General_100_CI_AI_SC_UTF8,\n\t[subcategory] varchar(8000)COLLATE Latin1_General_100_CI_AI_SC_UTF8,\n\t[status] varchar(8000)COLLATE Latin1_General_100_CI_AI_SC_UTF8,\n\t[address] varchar(8000)COLLATE Latin1_General_100_CI_AI_SC_UTF8,\n\t[latitude] float,\n\t[longitude] float,\n\t[source] varchar(8000)COLLATE Latin1_General_100_CI_AI_SC_UTF8,\n\t[extendedProperties] varchar(8000)COLLATE Latin1_General_100_CI_AI_SC_UTF8\n\t)\n\tWITH (\n\tLOCATION = 'Safety/Release/city=Chicago/*.parquet',\n\tDATA_SOURCE = [citydatacontainer_azureopendatastorage_blob_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\nSELECT TOP 100 * FROM [chicago-sql].safety_data\nGO\n\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "master"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/1 - GroupBy')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "Examples"
+				},
+				"content": {
+					"query": "SELECT DataType, COUNT(*) \n    FROM chicago.safety_data\n    GROUP BY DataType",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "master"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Setup Spark Data')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "sparkpool",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/6cfbb0af-d872-47ab-8368-dbef1d2cf61c/resourceGroups/syn-app/providers/Microsoft.Synapse/workspaces/syn-app-cool/bigDataPools/sparkpool",
+						"name": "sparkpool",
+						"type": "Spark",
+						"endpoint": "https://syn-app-cool.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkpool",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "2.4",
+						"nodeCount": 10,
+						"cores": 4,
+						"memory": 28,
+						"extraHeader": {},
+						"automaticScaleJobs": false
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {},
+						"source": [
+							"%%sql\n",
+							"\n",
+							"CREATE DATABASE chicago"
+						],
+						"attachments": {},
+						"outputs": [],
+						"execution_count": null
+					},
+					{
+						"cell_type": "code",
+						"metadata": {},
+						"source": [
+							"%%pyspark\n",
+							"from azureml.opendatasets import ChicagoSafety\n",
+							"\n",
+							"data = ChicagoSafety()\n",
+							"df = data.to_spark_dataframe()\n",
+							"# Display 10 rows\n",
+							"\n",
+							"#df.saveAsTable(\"chicago.safety_data\")\n",
+							"df.write.mode(\"overwrite\").saveAsTable(\"chicago.safety_data\")"
+						],
+						"attachments": {},
+						"outputs": [],
+						"execution_count": null
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/1 - GroupBy')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "Examples"
+				},
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "sparkpool",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"language_info": {
+						"name": "csharp"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/6cfbb0af-d872-47ab-8368-dbef1d2cf61c/resourceGroups/syn-app/providers/Microsoft.Synapse/workspaces/syn-app-cool/bigDataPools/sparkpool",
+						"name": "sparkpool",
+						"type": "Spark",
+						"endpoint": "https://syn-app-cool.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkpool",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "2.4",
+						"nodeCount": 10,
+						"cores": 4,
+						"memory": 28,
+						"extraHeader": {},
+						"automaticScaleJobs": false
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "markdown",
+						"metadata": {},
+						"source": [
+							"## T-SQL\n",
+							"\n",
+							"```sql\n",
+							"SELECT DataType, COUNT(*) \n",
+							"    FROM chicago.safety_data\n",
+							"    GROUP BY DataType\n",
+							"```\n",
+							"\n",
+							""
+						],
+						"attachments": {}
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {},
+						"source": [
+							"## Spark SQL\n",
+							""
+						],
+						"attachments": {}
+					},
+					{
+						"cell_type": "code",
+						"metadata": {},
+						"source": [
+							"%%sql\n",
+							"\n",
+							"SELECT DataType, COUNT(*) \n",
+							"    FROM chicago.safety_data\n",
+							"    GROUP BY DataType"
+						],
+						"attachments": {},
+						"outputs": [],
+						"execution_count": null
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {},
+						"source": [
+							"## DataFrame (C#)\n",
+							""
+						],
+						"attachments": {}
+					},
+					{
+						"cell_type": "code",
+						"metadata": {},
+						"source": [
+							"var dataFrame = spark.Read().Table(\"chicago.safety_data\");\n",
+							"var groupped = dataFrame\n",
+							"    .GroupBy(\"DataType\")\n",
+							"    .Agg(Functions.Count(\"DataType\"));\n",
+							"\n",
+							"groupped.Show();"
+						],
+						"attachments": {},
+						"outputs": [],
+						"execution_count": null
+					}
+				]
+			},
+			"dependsOn": []
+		}
+	]
+}
