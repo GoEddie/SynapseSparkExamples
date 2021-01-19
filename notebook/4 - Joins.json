@@ -1,0 +1,102 @@
+{
+	"name": "4 - Joins",
+	"properties": {
+		"folder": {
+			"name": "Examples"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "sparkpool",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"language_info": {
+				"name": "csharp"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/6cfbb0af-d872-47ab-8368-dbef1d2cf61c/resourceGroups/syn-app/providers/Microsoft.Synapse/workspaces/syn-app-cool/bigDataPools/sparkpool",
+				"name": "sparkpool",
+				"type": "Spark",
+				"endpoint": "https://syn-app-cool.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkpool",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 10,
+				"cores": 4,
+				"memory": 28,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## T-SQL INNER JOIN\n",
+					"\n",
+					"```sql\n",
+					"SELECT * FROM \n",
+					"    chicago.safety_data one \n",
+					"INNER JOIN chicago.safety_data two ON one.Address = two.Address;\n",
+					"```\n",
+					""
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## Spark SQL\n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"%%sql\n",
+					"\n",
+					"SELECT * FROM \n",
+					"    chicago.safety_data one \n",
+					"INNER JOIN chicago.safety_data two ON one.Address = two.Address;"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## DataFrame API (C#)\n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"var dataFrame = spark.Read();\n",
+					"dataFrame.Alias(\"one\")\n",
+					"            .Join(\n",
+					"                    dataFrame.Alias(\"two\")\n",
+					"                    , Functions.Col(\"one.Address\") == Functions.Col(\"two.Address\")\n",
+					"                    , \"inner\");\n",
+					"\n",
+					""
+				],
+				"execution_count": null
+			}
+		]
+	}
+}
