@@ -1,0 +1,19 @@
+{
+	"name": "3 - CTE",
+	"properties": {
+		"folder": {
+			"name": "Examples"
+		},
+		"content": {
+			"query": ";WITH CTE(dateTime, dataType, dataSubType)\nAS\n(\n  SELECT dateTime, dataType, dataSubType FROM chicago.safety_data\n)\nSELECT * FROM CTE;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "chicago-sql"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}
