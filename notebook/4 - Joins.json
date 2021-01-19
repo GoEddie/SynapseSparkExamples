@@ -67,14 +67,38 @@
 			},
 			{
 				"cell_type": "code",
+				"metadata": {
+					"diagram": {
+						"activateDiagramType": 1,
+						"chartConfig": {
+							"category": "bar",
+							"keys": [
+								"dataType"
+							],
+							"values": [
+								"latitude"
+							],
+							"yLabel": "latitude",
+							"xLabel": "dataType",
+							"aggregation": "SUM",
+							"aggByBackend": false
+						},
+						"aggData": "{\"latitude\":{\"Safety\":41678.069256341594}}",
+						"isSummary": false,
+						"previewData": {
+							"filter": null
+						},
+						"isSql": true
+					}
+				},
 				"source": [
 					"%%sql\n",
 					"\n",
 					"SELECT * FROM \n",
 					"    chicago.safety_data one \n",
-					"INNER JOIN chicago.safety_data two ON one.Address = two.Address;"
+					"INNER JOIN chicago.safety_data two ON one.Address = two.Address"
 				],
-				"execution_count": null
+				"execution_count": 1
 			},
 			{
 				"cell_type": "markdown",
@@ -86,25 +110,26 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"var dataFrame = spark.Read();\n",
+					"var dataFrame = spark.Read().Table(\"chicago.safety_data\");\n",
 					"dataFrame.Alias(\"one\")\n",
 					"            .Join(\n",
 					"                    dataFrame.Alias(\"two\")\n",
 					"                    , Functions.Col(\"one.Address\") == Functions.Col(\"two.Address\")\n",
-					"                    , \"inner\");\n",
+					"                    , \"inner\").Show();\n",
 					"\n",
 					""
 				],
-				"execution_count": null
-			},{
+				"execution_count": 6
+			},
+			{
 				"cell_type": "markdown",
 				"source": [
-					"## T-SQL INNER JOIN\n",
+					"## T-SQL LEFT OUTER JOIN\n",
 					"\n",
 					"```sql\n",
 					"SELECT * FROM \n",
 					"    chicago.safety_data one \n",
-					"INNER JOIN chicago.safety_data two ON one.Address = two.Address;\n",
+					"LEFT OUTER JOIN chicago.safety_data two ON one.Address = two.Address;\n",
 					"```\n",
 					""
 				]
@@ -123,9 +148,9 @@
 					"\n",
 					"SELECT * FROM \n",
 					"    chicago.safety_data one \n",
-					"INNER JOIN chicago.safety_data two ON one.Address = two.Address;"
+					"LEFT OUTER JOIN chicago.safety_data two ON one.Address = two.Address"
 				],
-				"execution_count": null
+				"execution_count": 3
 			},
 			{
 				"cell_type": "markdown",
