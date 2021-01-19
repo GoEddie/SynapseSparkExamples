@@ -9,3 +9,11 @@ There is an additional blog post that goes along with each example and that is a
 https://the.agilesql.club/tags/synapseanalytics/index.html
 
 Woot Woot!
+
+Examples:
+
+Group By: https://the.agilesql.club/2021/01/synapse-analytics-spark-example-1-group-by/
+
+Row_Number: https://the.agilesql.club/2021/01/synapse-analytics-spark-example-2-row_number/
+
+CTE: https://the.agilesql.club/2021/01/synapse-analytics-and-.net-for-apache-spark-example-3-cte/
