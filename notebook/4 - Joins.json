@@ -98,7 +98,7 @@
 					"    chicago.safety_data one \n",
 					"INNER JOIN chicago.safety_data two ON one.Address = two.Address"
 				],
-				"execution_count": 1
+				"execution_count": 13
 			},
 			{
 				"cell_type": "markdown",
@@ -119,7 +119,7 @@
 					"\n",
 					""
 				],
-				"execution_count": 6
+				"execution_count": 14
 			},
 			{
 				"cell_type": "markdown",
@@ -143,6 +143,30 @@
 			},
 			{
 				"cell_type": "code",
+				"metadata": {
+					"diagram": {
+						"activateDiagramType": 1,
+						"chartConfig": {
+							"category": "bar",
+							"keys": [
+								"dataType"
+							],
+							"values": [
+								"latitude"
+							],
+							"yLabel": "latitude",
+							"xLabel": "dataType",
+							"aggregation": "SUM",
+							"aggByBackend": false
+						},
+						"aggData": "{\"latitude\":{\"Safety\":41829.47931579468}}",
+						"isSummary": false,
+						"previewData": {
+							"filter": null
+						},
+						"isSql": true
+					}
+				},
 				"source": [
 					"%%sql\n",
 					"\n",
@@ -150,7 +174,7 @@
 					"    chicago.safety_data one \n",
 					"LEFT OUTER JOIN chicago.safety_data two ON one.Address = two.Address"
 				],
-				"execution_count": 3
+				"execution_count": 15
 			},
 			{
 				"cell_type": "markdown",
@@ -162,26 +186,26 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"var dataFrame = spark.Read();\n",
+					"var dataFrame = spark.Read().Table(\"chicago.safety_data\");;\n",
 					"dataFrame.Alias(\"one\")\n",
 					"            .Join(\n",
 					"                    dataFrame.Alias(\"two\")\n",
 					"                    , Functions.Col(\"one.Address\") == Functions.Col(\"two.Address\")\n",
-					"                    , \"inner\");\n",
+					"                    , \"left_outer\").Show();  //alternative \"left\" or \"leftouter\"\n",
 					"\n",
 					""
 				],
-				"execution_count": null
+				"execution_count": 16
 			},
 			{
 				"cell_type": "markdown",
 				"source": [
-					"## T-SQL INNER JOIN\n",
+					"## T-SQL RIGHT OUTER JOIN\n",
 					"\n",
 					"```sql\n",
 					"SELECT * FROM \n",
 					"    chicago.safety_data one \n",
-					"INNER JOIN chicago.safety_data two ON one.Address = two.Address;\n",
+					"RIGHT OUTER JOIN chicago.safety_data two ON one.Address = two.Address;\n",
 					"```\n",
 					""
 				]
@@ -195,14 +219,38 @@
 			},
 			{
 				"cell_type": "code",
+				"metadata": {
+					"diagram": {
+						"activateDiagramType": 1,
+						"chartConfig": {
+							"category": "bar",
+							"keys": [
+								"dataType"
+							],
+							"values": [
+								"latitude"
+							],
+							"yLabel": "latitude",
+							"xLabel": "dataType",
+							"aggregation": "SUM",
+							"aggByBackend": false
+						},
+						"aggData": "{\"latitude\":{\"Safety\":41829.468001074}}",
+						"isSummary": false,
+						"previewData": {
+							"filter": null
+						},
+						"isSql": true
+					}
+				},
 				"source": [
 					"%%sql\n",
 					"\n",
 					"SELECT * FROM \n",
 					"    chicago.safety_data one \n",
-					"INNER JOIN chicago.safety_data two ON one.Address = two.Address;"
+					"RIGHT OUTER JOIN chicago.safety_data two ON one.Address = two.Address"
 				],
-				"execution_count": null
+				"execution_count": 17
 			},
 			{
 				"cell_type": "markdown",
@@ -214,26 +262,24 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"var dataFrame = spark.Read();\n",
+					"var dataFrame = spark.Read().Table(\"chicago.safety_data\");;\n",
 					"dataFrame.Alias(\"one\")\n",
 					"            .Join(\n",
 					"                    dataFrame.Alias(\"two\")\n",
 					"                    , Functions.Col(\"one.Address\") == Functions.Col(\"two.Address\")\n",
-					"                    , \"inner\");\n",
-					"\n",
-					""
+					"                    , \"right_outer\").Show();   //alternative \"right\" or \"rightouter\""
 				],
-				"execution_count": null
+				"execution_count": 18
 			},
 			{
 				"cell_type": "markdown",
 				"source": [
-					"## T-SQL INNER JOIN\n",
+					"## T-SQL FULL OUTER JOIN\n",
 					"\n",
 					"```sql\n",
 					"SELECT * FROM \n",
 					"    chicago.safety_data one \n",
-					"INNER JOIN chicago.safety_data two ON one.Address = two.Address;\n",
+					"FULL OUTER JOIN chicago.safety_data two ON one.Address = two.Address;\n",
 					"```\n",
 					""
 				]
@@ -247,14 +293,38 @@
 			},
 			{
 				"cell_type": "code",
+				"metadata": {
+					"diagram": {
+						"activateDiagramType": 1,
+						"chartConfig": {
+							"category": "bar",
+							"keys": [
+								"dataType"
+							],
+							"values": [
+								"latitude"
+							],
+							"yLabel": "latitude",
+							"xLabel": "dataType",
+							"aggregation": "SUM",
+							"aggByBackend": false
+						},
+						"aggData": "{\"latitude\":{\"Safety\":41678.06924045294}}",
+						"isSummary": false,
+						"previewData": {
+							"filter": null
+						},
+						"isSql": true
+					}
+				},
 				"source": [
 					"%%sql\n",
 					"\n",
 					"SELECT * FROM \n",
 					"    chicago.safety_data one \n",
-					"INNER JOIN chicago.safety_data two ON one.Address = two.Address;"
+					"FULL OUTER JOIN chicago.safety_data two ON one.Address = two.Address"
 				],
-				"execution_count": null
+				"execution_count": 19
 			},
 			{
 				"cell_type": "markdown",
@@ -266,26 +336,26 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"var dataFrame = spark.Read();\n",
+					"var dataFrame = spark.Read().Table(\"chicago.safety_data\");\n",
 					"dataFrame.Alias(\"one\")\n",
 					"            .Join(\n",
 					"                    dataFrame.Alias(\"two\")\n",
 					"                    , Functions.Col(\"one.Address\") == Functions.Col(\"two.Address\")\n",
-					"                    , \"inner\");\n",
+					"                    , \"full_outer\").Show(); //alternative \"outer\" or \"fullouter\"\n",
 					"\n",
 					""
 				],
-				"execution_count": null
+				"execution_count": 20
 			},
 			{
 				"cell_type": "markdown",
 				"source": [
-					"## T-SQL INNER JOIN\n",
+					"## T-SQL CROSS JOIN\n",
 					"\n",
 					"```sql\n",
 					"SELECT * FROM \n",
 					"    chicago.safety_data one \n",
-					"INNER JOIN chicago.safety_data two ON one.Address = two.Address;\n",
+					"CROSS JOIN chicago.safety_data two;\n",
 					"```\n",
 					""
 				]
@@ -299,14 +369,132 @@
 			},
 			{
 				"cell_type": "code",
+				"metadata": {
+					"diagram": {
+						"activateDiagramType": 1,
+						"chartConfig": {
+							"category": "bar",
+							"keys": [
+								"dataType"
+							],
+							"values": [
+								"latitude"
+							],
+							"yLabel": "latitude",
+							"xLabel": "dataType",
+							"aggregation": "SUM",
+							"aggByBackend": false
+						},
+						"aggData": "{\"latitude\":{\"Safety\":41750.00248863803}}",
+						"isSummary": false,
+						"previewData": {
+							"filter": null
+						},
+						"isSql": true
+					}
+				},
 				"source": [
 					"%%sql\n",
 					"\n",
 					"SELECT * FROM \n",
 					"    chicago.safety_data one \n",
-					"INNER JOIN chicago.safety_data two ON one.Address = two.Address;"
+					"CROSS JOIN chicago.safety_data"
 				],
-				"execution_count": null
+				"execution_count": 21
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## DataFrame API (C#)\n",
+					"\n",
+					"Note that we must use `CrossJoin` rather than `Join` when we don't pass in a list of columns to join on.\n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"var dataFrame = spark.Read().Table(\"chicago.safety_data\");\n",
+					"dataFrame.Alias(\"one\")\n",
+					"            .CrossJoin(\n",
+					"                    dataFrame.Alias(\"two\")\n",
+					"                    );\n",
+					"\n",
+					""
+				],
+				"execution_count": 22
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## Join types not available in T-SQL\n",
+					"\n",
+					"### Left-Semi Join\n",
+					"\n",
+					"This is an inner join but only returns the columns from the left hand side of the join.\n",
+					"\n",
+					"### Left-Anti Join\n",
+					"\n",
+					"This is the opposite of the `Left-Semi` join, it returns the columns on the right hand side of the join.\n",
+					""
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## T-SQL\n",
+					"\n",
+					"```sql\n",
+					"SELECT one.* FROM \n",
+					"    chicago.safety_data one \n",
+					"INNER JOIN chicago.safety_data two ON one.Address = two.Address;\n",
+					"\n",
+					"```\n",
+					"\n",
+					""
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## Spark SQL\n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"diagram": {
+						"activateDiagramType": 1,
+						"chartConfig": {
+							"category": "bar",
+							"keys": [
+								"dataType"
+							],
+							"values": [
+								"latitude"
+							],
+							"yLabel": "latitude",
+							"xLabel": "dataType",
+							"aggregation": "SUM",
+							"aggByBackend": false
+						},
+						"aggData": "{\"latitude\":{\"Safety\":41791.84512554703}}",
+						"isSummary": false,
+						"previewData": {
+							"filter": null
+						},
+						"isSql": true
+					}
+				},
+				"source": [
+					"%%sql\n",
+					"\n",
+					"SELECT * FROM \n",
+					"    chicago.safety_data one \n",
+					"LEFT SEMI JOIN chicago.safety_data two ON one.Address = two.Address"
+				],
+				"execution_count": 23
 			},
 			{
 				"cell_type": "markdown",
@@ -318,16 +506,89 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"var dataFrame = spark.Read();\n",
+					"var dataFrame = spark.Read().Table(\"chicago.safety_data\");\n",
 					"dataFrame.Alias(\"one\")\n",
 					"            .Join(\n",
 					"                    dataFrame.Alias(\"two\")\n",
 					"                    , Functions.Col(\"one.Address\") == Functions.Col(\"two.Address\")\n",
-					"                    , \"inner\");\n",
+					"                    , \"left_semi\").Show(); //alternative \"semi\" or \"leftsemi\""
+				],
+				"execution_count": 24
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## T-SQL\n",
+					"\n",
+					"```sql\n",
+					"SELECT two.* FROM \n",
+					"    chicago.safety_data one \n",
+					"INNER JOIN chicago.safety_data two ON one.Address = two.Address;\n",
+					"```\n",
 					"\n",
 					""
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## Spark SQL\n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"diagram": {
+						"activateDiagramType": 1,
+						"chartConfig": {
+							"category": "bar",
+							"keys": [
+								"dataType"
+							],
+							"values": [
+								"latitude"
+							],
+							"yLabel": "latitude",
+							"xLabel": "dataType",
+							"aggregation": "SUM",
+							"aggByBackend": false
+						},
+						"aggData": "{\"latitude\":{\"Safety\":418.589517536}}",
+						"isSummary": false,
+						"previewData": {
+							"filter": null
+						},
+						"isSql": true
+					}
+				},
+				"source": [
+					"%%sql\n",
+					"\n",
+					"SELECT * FROM \n",
+					"    chicago.safety_data one \n",
+					"LEFT ANTI JOIN chicago.safety_data two ON one.Address = two.Address"
 				],
-				"execution_count": null
+				"execution_count": 25
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## DataFrame (C#)\n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"var dataFrame = spark.Read().Table(\"chicago.safety_data\");\n",
+					"dataFrame.Alias(\"one\")\n",
+					"            .Join(\n",
+					"                    dataFrame.Alias(\"two\")\n",
+					"                    , Functions.Col(\"one.Address\") == Functions.Col(\"two.Address\")\n",
+					"                    , \"left_anti\").Show(); //alternative \"anti\" or \"leftanti\""
+				],
+				"execution_count": 26
 			}
 		]
 	}

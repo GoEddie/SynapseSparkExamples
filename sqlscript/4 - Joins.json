@@ -5,7 +5,7 @@
 			"name": "Examples"
 		},
 		"content": {
-			"query": "SELECT * FROM \n    chicago.safety_data one \nINNER JOIN chicago.safety_data two ON one.Address = two.Address;\n\nGO\n\nSELECT * FROM \n    chicago.safety_data one \nLEFT OUTER JOIN chicago.safety_data two ON one.Address = two.Address;\n\nGO\n\nSELECT * FROM \n    chicago.safety_data one \nRIGHT OUTER JOIN chicago.safety_data two ON one.Address = two.Address;\n\nGO\n\nSELECT * FROM \n    chicago.safety_data one \nFULL OUTER JOIN chicago.safety_data two ON one.Address = two.Address;\n\nGO\n\nSELECT * FROM \n    chicago.safety_data one \nCROSS JOIN chicago.safety_data two;\n\n",
+			"query": "SELECT * FROM \n    chicago.safety_data one \nINNER JOIN chicago.safety_data two ON one.Address = two.Address;\n\nGO\n\nSELECT * FROM \n    chicago.safety_data one \nLEFT OUTER JOIN chicago.safety_data two ON one.Address = two.Address;\n\nGO\n\nSELECT * FROM \n    chicago.safety_data one \nRIGHT OUTER JOIN chicago.safety_data two ON one.Address = two.Address;\n\nGO\n\nSELECT * FROM \n    chicago.safety_data one \nFULL OUTER JOIN chicago.safety_data two ON one.Address = two.Address;\n\nGO\n\nSELECT * FROM \n    chicago.safety_data one \nCROSS JOIN chicago.safety_data two;\n\nGO\n\n-- LEFT-SEMI JOIN\n\nSELECT one.* FROM \n    chicago.safety_data one \nINNER JOIN chicago.safety_data two ON one.Address = two.Address;\n\nGO\n\n-- LEFT-ANTI JOIN\n\nSELECT two.* FROM \n    chicago.safety_data one \nINNER JOIN chicago.safety_data two ON one.Address = two.Address;\n\nGO",
 			"metadata": {
 				"language": "sql"
 			},
