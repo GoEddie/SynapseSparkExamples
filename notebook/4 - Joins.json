@@ -442,7 +442,7 @@
 			{
 				"cell_type": "markdown",
 				"source": [
-					"## T-SQL\n",
+					"## T-SQL Left-Semi Join\n",
 					"\n",
 					"```sql\n",
 					"SELECT one.* FROM \n",
@@ -518,7 +518,7 @@
 			{
 				"cell_type": "markdown",
 				"source": [
-					"## T-SQL\n",
+					"## T-SQL Left-Anti Join\n",
 					"\n",
 					"```sql\n",
 					"SELECT two.* FROM \n",
@@ -574,7 +574,7 @@
 			{
 				"cell_type": "markdown",
 				"source": [
-					"## DataFrame (C#)\n",
+					"## DataFrame API (C#)\n",
 					""
 				]
 			},
