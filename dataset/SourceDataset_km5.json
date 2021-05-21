@@ -1,0 +1,266 @@
+{
+	"name": "SourceDataset_km5",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "bulk-lookup-sample.csv",
+				"folderPath": "data",
+				"fileSystem": "datalake"
+			},
+			"columnDelimiter": ",",
+			"rowDelimiter": "\n",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "EAN 8",
+				"type": "String"
+			},
+			{
+				"name": "UPC A",
+				"type": "String"
+			},
+			{
+				"name": "EAN 13",
+				"type": "String"
+			},
+			{
+				"name": "MPN",
+				"type": "String"
+			},
+			{
+				"name": "MODEL",
+				"type": "String"
+			},
+			{
+				"name": "ASIN",
+				"type": "String"
+			},
+			{
+				"name": "PRODUCT NAME",
+				"type": "String"
+			},
+			{
+				"name": "CATEGORY",
+				"type": "String"
+			},
+			{
+				"name": "MANUFACTURER",
+				"type": "String"
+			},
+			{
+				"name": "BRAND",
+				"type": "String"
+			},
+			{
+				"name": "LABEL",
+				"type": "String"
+			},
+			{
+				"name": "AUTHOR",
+				"type": "String"
+			},
+			{
+				"name": "PUBLISHER",
+				"type": "String"
+			},
+			{
+				"name": "AUDIENCE RATING",
+				"type": "String"
+			},
+			{
+				"name": "INGREDIENTS",
+				"type": "String"
+			},
+			{
+				"name": "NUTRITION FACTS",
+				"type": "String"
+			},
+			{
+				"name": "COLOR",
+				"type": "String"
+			},
+			{
+				"name": "FORMAT",
+				"type": "String"
+			},
+			{
+				"name": "SIZE",
+				"type": "String"
+			},
+			{
+				"name": "LENGTH",
+				"type": "String"
+			},
+			{
+				"name": "WIDTH",
+				"type": "String"
+			},
+			{
+				"name": "HEIGHT",
+				"type": "String"
+			},
+			{
+				"name": "WEIGHT",
+				"type": "String"
+			},
+			{
+				"name": "DESCRIPTION",
+				"type": "String"
+			},
+			{
+				"name": "FEATURES",
+				"type": "String"
+			},
+			{
+				"name": "IMAGE URL 1",
+				"type": "String"
+			},
+			{
+				"name": "IMAGE URL 2",
+				"type": "String"
+			},
+			{
+				"name": "IMAGE URL 3",
+				"type": "String"
+			},
+			{
+				"name": "IMAGE URL 4",
+				"type": "String"
+			},
+			{
+				"name": "IMAGE URL 5",
+				"type": "String"
+			},
+			{
+				"name": "STORE NAME 1",
+				"type": "String"
+			},
+			{
+				"name": "STORE COUNTRY 1",
+				"type": "String"
+			},
+			{
+				"name": "STORE CURRENCY 1",
+				"type": "String"
+			},
+			{
+				"name": "STORE CURRENCY SYMBOL 1",
+				"type": "String"
+			},
+			{
+				"name": "STORE PRICE 1",
+				"type": "String"
+			},
+			{
+				"name": "STORE PRODUCT URL 1",
+				"type": "String"
+			},
+			{
+				"name": "STORE NAME 2",
+				"type": "String"
+			},
+			{
+				"name": "STORE COUNTRY 2",
+				"type": "String"
+			},
+			{
+				"name": "STORE CURRENCY 2",
+				"type": "String"
+			},
+			{
+				"name": "STORE CURRENCY SYMBOL 2",
+				"type": "String"
+			},
+			{
+				"name": "STORE PRICE 2",
+				"type": "String"
+			},
+			{
+				"name": "STORE PRODUCT URL 2",
+				"type": "String"
+			},
+			{
+				"name": "STORE NAME 3",
+				"type": "String"
+			},
+			{
+				"name": "STORE COUNTRY 3",
+				"type": "String"
+			},
+			{
+				"name": "STORE CURRENCY 3",
+				"type": "String"
+			},
+			{
+				"name": "STORE CURRENCY SYMBOL 3",
+				"type": "String"
+			},
+			{
+				"name": "STORE PRICE 3",
+				"type": "String"
+			},
+			{
+				"name": "STORE PRODUCT URL 3",
+				"type": "String"
+			},
+			{
+				"name": "STORE NAME 4",
+				"type": "String"
+			},
+			{
+				"name": "STORE COUNTRY 4",
+				"type": "String"
+			},
+			{
+				"name": "STORE CURRENCY 4",
+				"type": "String"
+			},
+			{
+				"name": "STORE CURRENCY SYMBOL 4",
+				"type": "String"
+			},
+			{
+				"name": "STORE PRICE 4",
+				"type": "String"
+			},
+			{
+				"name": "STORE PRODUCT URL 4",
+				"type": "String"
+			},
+			{
+				"name": "STORE NAME 5",
+				"type": "String"
+			},
+			{
+				"name": "STORE COUNTRY 5",
+				"type": "String"
+			},
+			{
+				"name": "STORE CURRENCY 5",
+				"type": "String"
+			},
+			{
+				"name": "STORE CURRENCY SYMBOL 5",
+				"type": "String"
+			},
+			{
+				"name": "STORE PRICE 5",
+				"type": "String"
+			},
+			{
+				"name": "STORE PRODUCT URL 5",
+				"type": "String"
+			}
+		]
+	}
+}
